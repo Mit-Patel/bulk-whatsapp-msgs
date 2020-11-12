@@ -63,8 +63,56 @@
                             <div class="text-center">
                                 <h5>Scan QR Code</h5>
                                 <img src="<%=data%>" alt="" style="width:300px; height:300px;">
+                                <div>
+                                    <p id="demo"></p>
+                                </div>
                             </div>
                             <a href="/" class="btn btn-primary">Go Back!</a>
+                            <script>
+                                function addMinutes(date, minutes) {
+                                    return new Date(date.getTime() + minutes * 60000);
+                                }
+                                $(document).ready(() => {
+                                    // Set the date we're counting down to
+                                    var countDownDate = addMinutes(new Date(), 10).getTime();
+                                    var c = 0;
+                                    // Update the count down every 1 second
+                                    var x = setInterval(function() {
+
+                                        // Get today's date and time
+                                        var now = new Date().getTime();
+                                        c++;
+                                        // Find the distance between now and the count down date
+                                        var distance = countDownDate - now;
+
+                                        // Time calculations for days, hours, minutes and seconds
+                                        // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                        // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                                        // Output the result in an element with id="demo"
+                                        document.getElementById("demo").innerHTML = minutes + "m " + seconds + "s ";
+                                        // console.log(distance);
+                                        if (c % 30 === 0) {
+                                            $.ajax({
+                                                url: "/status",
+                                                success: function(result) {
+                                                    if (result !== "wait") {
+                                                        window.location = "/";
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        // If the count down is over, write some text 
+                                        if (distance < 0) {
+                                            clearInterval(x);
+                                            document.getElementById("demo").innerHTML = "EXPIRED";
+                                        }
+                                    }, 1000);
+
+                                });
+                            </script>
                             <%}     else{%>
                                 <div class="row">
                                     <div class="col">
@@ -113,10 +161,6 @@
             else
                 $("#attachment").attr("accept", "image/*");
         }
-
-        $(document).ready(() => {
-
-        });
     </script>
 </body>
 

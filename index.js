@@ -45,7 +45,7 @@ var qrCodeText = '';
 var data = [];
 var formMessage = '';
 var isSent = false;
-var sentNum = 0;
+var statusReady = false;
 var csvData = [];
 
 // Whatsapp Web Client events
@@ -97,7 +97,12 @@ router.get('/', function(req, res) {
 })
 
 router.get('/status', function(req, res) {
-    res.render('status');
+    if (statusReady) {
+        res.download('uploads/status.csv');
+    } else {
+        res.send('wait');
+    }
+
     // res.render('index', { data: 'Success' });
 })
 
@@ -174,6 +179,7 @@ setInterval(() => {
             isSent = false;
             csvData = [];
             data = [];
+            statusReady = true;
             client.destroy();
         }
     } catch (err) {
