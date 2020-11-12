@@ -163,7 +163,7 @@ setInterval(() => {
                 .writeRecords(csvData)
                 .then(() => console.log('The CSV file was written successfully'));
 
-            open("http://localhost:3000/status");
+            open("http://localhost:" + (process.env.PORT || 3000) + "/status");
             isSent = false;
             csvData = [];
             data = [];
