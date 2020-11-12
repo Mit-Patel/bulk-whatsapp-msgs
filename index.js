@@ -33,7 +33,14 @@ const { Client, MessageMedia } = require('whatsapp-web.js');
 const QRCode = require('qrcode');
 
 // initializing Whatsapp client and setting listeners
-var client = new Client({ qrRefreshIntervalMs: 300000, qrTimeoutMs: 300000, takeoverTimeoutMs: 500000 });
+var client = new Client({
+    qrRefreshIntervalMs: 300000,
+    qrTimeoutMs: 300000,
+    takeoverTimeoutMs: 500000,
+    puppeteer: {
+        args: ['--no-sandbox'],
+    }
+});
 var qrCodeText = '';
 var data = [];
 var formMessage = '';
