@@ -107,7 +107,7 @@ router.get('/status', function(req, res) {
 })
 
 router.get('/uploads/status.csv', function(req, res) {
-    res.download('uploads/status.csv');
+    res.sendFile('uploads/status.csv');
 })
 
 router.post('/up', async(req, res) => {
