@@ -74,11 +74,14 @@ client.on('ready', () => {
 
                             console.log("Msg Sent to " + element);
 
-                            csvData.push({ mobno: element.toString(), status: "Sent" });
+                            // csvData.push({ mobno: element.toString(), status: "Sent" });
+                            csvData.push(element.toString() + " - Message Sent");
                             // sentNum++;
                         }
                     } catch (err) {
-                        csvData.push({ mobno: dataArray[i].toString(), status: "Not Sent" });
+                        // csvData.push({ mobno: dataArray[i].toString(), status: "Not Sent" });
+                        csvData.push(element.toString() + " - Message Not Sent");
+
                         console.log("Error while sending message: " + err);
                     }
                 }, 2000 * i, i);
@@ -98,7 +101,9 @@ router.get('/', function(req, res) {
 
 router.get('/status', function(req, res) {
     if (statusReady) {
-        res.download('uploads/status.csv');
+        res.send(csvData);
+        statusReady = false;
+        csvData = [];
     } else {
         res.send('wait');
     }
@@ -106,9 +111,9 @@ router.get('/status', function(req, res) {
     // res.render('index', { data: 'Success' });
 })
 
-router.get('/uploads/status.csv', function(req, res) {
-    res.sendFile('uploads/status.csv');
-})
+/* router.get('/uploads/status.csv', function(req, res) {
+    res.attachment(__dirname + '/uploads/status.csv').send();
+}) */
 
 router.post('/up', async(req, res) => {
 
@@ -163,7 +168,7 @@ router.post('/up', async(req, res) => {
 setInterval(() => {
     try {
         if (isSent) {
-            const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+            /* const createCsvWriter = require('csv-writer').createObjectCsvWriter;
             const csvWriter = createCsvWriter({
                 path: 'uploads/status.csv',
                 header: [
@@ -173,11 +178,11 @@ setInterval(() => {
             });
             csvWriter
                 .writeRecords(csvData)
-                .then(() => console.log('The CSV file was written successfully'));
+                .then(() => console.log('The CSV file was written successfully')); */
 
-            open("http://localhost:" + (process.env.PORT || 3000) + "/status");
+            // open("http://localhost:" + (process.env.PORT || 3000) + "/status");
             isSent = false;
-            csvData = [];
+            // csvData = [];
             data = [];
             statusReady = true;
             client.destroy();

@@ -60,14 +60,17 @@
                     <%}%>
 
                         <%if(status && data !== "wait" && data){%>
+                            <a href="/" class="btn btn-primary">Go Back!</a>
                             <div class="text-center">
                                 <h5>Scan QR Code</h5>
                                 <img src="<%=data%>" alt="" style="width:300px; height:300px;">
                                 <div>
                                     <p id="demo"></p>
                                 </div>
+                                <div>
+                                    <p id="status"></p>
+                                </div>
                             </div>
-                            <a href="/" class="btn btn-primary">Go Back!</a>
                             <script>
                                 function addMinutes(date, minutes) {
                                     return new Date(date.getTime() + minutes * 60000);
@@ -98,9 +101,23 @@
                                             $.ajax({
                                                 url: "/status",
                                                 success: function(result) {
+                                                    console.log(result);
                                                     if (result !== "wait") {
-                                                        window.location = "/";
+                                                        $("#status").text("");
+                                                        result.forEach(res => {
+                                                            $("#status").append(res + "<br />");
+                                                        });
+                                                        clearInterval(x);
+                                                    } else {
+                                                        $("#status").text("Sending Messages... Please wait!");
                                                     }
+                                                    // if (result === "done") {
+                                                    //     $.ajax({
+                                                    //         url: "/uploads/status.csv",
+                                                    //     }).then(() => {
+                                                    //         window.location.assign("/");
+                                                    //     });
+                                                    // }
                                                 }
                                             });
                                         }
