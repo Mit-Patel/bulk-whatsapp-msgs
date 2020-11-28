@@ -187,8 +187,11 @@ setInterval(() => {
             statusReady = true;
             client.destroy();
 
-            fs.rmdir("uploads/", { recursive: true })
-                .then(() => console.log('directory removed!'));
+            fs.rmdir("uploads", { recursive: true }, function(err, data) {
+                if (err)
+                    console.log('Delete Error: ' + err);
+                console.log('directory removed!');
+            });
         }
     } catch (err) {
         console.log("Error while creating Status CSV: " + err);
